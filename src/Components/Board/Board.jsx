@@ -4,17 +4,58 @@ import { useState } from 'react'
 export const  Board = () =>{
 
     const [squars, setSquars] = useState(Array(9).fill(null))
+    const [xIsNext, setXIsNext] = useState(true)
+
+    function calculateWinner(squars){
+        const lines = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,4,8],
+            [2,4,6],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8]
+        ]
+
+        for(let i = 0; i < lines.length; i++){
+            const [a,b,c] = lines[i]
+            if(squars[a] && squars[a] === squars[b] && squars[a] === squars[c]){
+                return squars[a]
+            }
+        }
+        return null
+    }
 
     function handleClick(i){
-        console.log(i, "Clicked")
+        const winner = calculateWinner(squars)
+
+        if(winner){
+            alert(`Winner is ${winner}`)
+        }
+
+        if(squars[i] || winner){
+            return;
+        }
+
         const nextSquars = squars.slice()
-        nextSquars[i] = 'X'
+        
+        if(xIsNext){
+            nextSquars[i] = 'X'
+        }
+        else{
+            nextSquars[i] = 'O'
+        }
+
         setSquars(nextSquars)
+        setXIsNext(!xIsNext)
+
+
     }
 
     return (
         <>
-        <h2>Game Board</h2>
+        <h2>Next Playr {status}</h2>
         <div className="flex">
             <Square value={squars[0]} onClick={()=>handleClick(0)}/>
             <Square value={squars[1]} onClick={()=>handleClick(1)} />
