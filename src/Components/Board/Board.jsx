@@ -5,6 +5,7 @@ export const  Board = () =>{
 
     const [squars, setSquars] = useState(Array(9).fill(null))
     const [xIsNext, setXIsNext] = useState(true)
+    const [status, setStatus] = useState('Next Player: X')
 
     function calculateWinner(squars){
         const lines = [
@@ -30,13 +31,15 @@ export const  Board = () =>{
     function handleClick(i){
         const winner = calculateWinner(squars)
 
-        if(winner){
-            alert(`Winner is ${winner}`)
-        }
-
         if(squars[i] || winner){
             return;
         }
+
+        if(winner){
+            setStatus('Winner: ' + winner)
+        }
+        else setStatus('Next Player: ' + (xIsNext ? 'O' : 'X'))
+
 
         const nextSquars = squars.slice()
         
@@ -55,7 +58,7 @@ export const  Board = () =>{
 
     return (
         <>
-        <h2>Next Playr {status}</h2>
+        <h2> {status}</h2>
         <div className="flex">
             <Square value={squars[0]} onClick={()=>handleClick(0)}/>
             <Square value={squars[1]} onClick={()=>handleClick(1)} />
